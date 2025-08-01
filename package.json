@@ -1,18 +1,28 @@
 {
-  "name": "lachapa-burguer-api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": {
-    "name": "Daniel Knaip",
-    "url": "https://github.com/nielkp"
-  },
-  "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "express": "^5.1.0"
-  }
+	"name": "lachapa-burguer-api",
+	"version": "1.0.0",
+	"description": "",
+	"main": "src/server.js",
+	"scripts": {
+		"dev": "nodemon"
+	},
+	"author": {
+		"name": "Daniel Knaip",
+		"url": "https://github.com/nielkp"
+	},
+	"license": "ISC",
+	"type": "commonjs",
+	"dependencies": {
+		"dotenv": "^17.2.1",
+		"express": "^5.1.0",
+		"pg": "^8.16.3",
+		"pg-hstore": "^2.3.4",
+		"sequelize": "^6.37.7"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.1.3",
+		"nodemon": "^3.1.10",
+		"sequelize-cli": "^6.6.3",
+		"sucrase": "^3.35.0"
+	}
 }
