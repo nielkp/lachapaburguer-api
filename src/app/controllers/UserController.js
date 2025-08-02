@@ -12,7 +12,7 @@ class UserController {
         .min(2, 'O nome precisa ter no minimo 2 caracteres')
         .required('O nome é obrigatório'),
       email: Yup.string().email('O email não é válido').required(),
-      password_hash: Yup.string()
+      password: Yup.string()
         .min(6, 'A senha precisa ter no minimo 6 caracteres')
         .required(),
       admin: Yup.boolean(),
@@ -24,7 +24,7 @@ class UserController {
       return response.status(400).json({ error: err.errors });
     }
 
-    const { name, email, password_hash, admin } = request.body;
+    const { name, email, password, admin } = request.body;
 
     const userExists = await User.findOne({
       where: {
@@ -42,7 +42,7 @@ class UserController {
       id: v4(),
       name,
       email,
-      password_hash,
+      password,
       admin,
     });
 
