@@ -1,3 +1,6 @@
-import app from "./app";
+import app from './app';
+require('dotenv').config();
 
-app.listen(3001, () => console.log("✅ SERVIDOR RODANDO ⚙️  PORTA: 3001 !"));
+const PORT = process.env.API_PORT;
+
+app.listen(PORT, () => console.log(`✅ SERVIDOR RODANDO ⚙️  PORTA: ${PORT} !`));

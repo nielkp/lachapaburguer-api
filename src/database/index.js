@@ -1,10 +1,9 @@
+import configDatabase from '../config/database';
+import Product from '../app/models/Product';
+import User from '../app/models/User';
 import { Sequelize } from 'sequelize';
 
-import configDatabase from '../config/database';
-
-import User from '../app/models/User';
-
-const models = [User];
+const models = [User, Product];
 
 class Database {
   constructor() {

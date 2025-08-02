@@ -15,7 +15,7 @@ docker run --name api-postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d pos
 
 - YUP
 - UUID
+- Express
 - BCRYPT
 - MULTER
-- Express
 - Sequelize
