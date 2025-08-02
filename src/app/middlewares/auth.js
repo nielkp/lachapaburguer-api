@@ -15,8 +15,9 @@ function authMiddleware(request, response, next) {
     if (err) {
       return response.status(401).json({ error: 'Token inválido!' });
     }
-
+    //SEGUE O FLUXO
     request.userId = decoded.id;
+    request.userName = decoded.name;
     next(); // Chama o próximo middleware/rota
   });
 }

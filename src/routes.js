@@ -1,6 +1,7 @@
 import CategoryController from './app/controllers/CategoryController';
 import SessionController from './app/controllers/SessionController';
 import ProductController from './app/controllers/ProductController';
+import OrderController from './app/controllers/OrderController';
 import UserController from './app/controllers/UserController';
 import authMiddleware from './app/middlewares/auth';
 import multerConfig from './config/multer';
@@ -22,6 +23,8 @@ routes.get('/products', ProductController.index);
 //ROTA DE CATEGORIAS
 routes.post('/categories', CategoryController.store);
 routes.get('/categories', CategoryController.index);
+//ROTA DE PEDIDOS
+routes.post('/orders', OrderController.store);
 
 //STATUS DO SERVIDOR!!!
 routes.get('/status', (request, response) => {
