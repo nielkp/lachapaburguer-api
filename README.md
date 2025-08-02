@@ -19,3 +19,4 @@ docker run --name api-postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d pos
 - BCRYPT
 - MULTER
 - Sequelize
+- JsonWebToken

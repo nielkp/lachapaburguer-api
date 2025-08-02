@@ -1,5 +1,8 @@
 import * as Yup from 'yup';
+import jwt from 'jsonwebtoken';
 import User from '../models/User';
+
+require('dotenv').config();
 
 class SessionController {
   async store(request, response) {
@@ -36,11 +39,17 @@ class SessionController {
       return emailOrPasswordIncorrect();
     }
 
+    const TOKEN_HASH = process.env.JWT_TOKEN;
+    const TOKEN_EXPIRES = process.env.JWT_EXPIRES;
+
     return response.status(201).json({
       id: user.id,
       name: user.name,
       email,
       admin: user.admin,
+      token: jwt.sign({ id: user.id }, TOKEN_HASH, {
+        expiresIn: TOKEN_EXPIRES,
+      }),
     });
   }
 }
