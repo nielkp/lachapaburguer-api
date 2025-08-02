@@ -2,7 +2,7 @@ import CategoryController from './app/controllers/CategoryController';
 import SessionController from './app/controllers/SessionController';
 import ProductController from './app/controllers/ProductController';
 import UserController from './app/controllers/UserController';
-import authMiddleware from './middlewares/auth';
+import authMiddleware from './app/middlewares/auth';
 import multerConfig from './config/multer';
 import { Router } from 'express';
 import multer from 'multer';
