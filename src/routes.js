@@ -14,9 +14,14 @@ const upload = multer(multerConfig);
 
 routes.post('/users', UserController.store);
 routes.post('/session', SessionController.store);
-
-routes.use(authMiddleware);
+//STATUS DO SERVIDOR!!!
+routes.get('/status', (request, response) => {
+  return response
+    .status(200)
+    .json({ message: '✅ API ⚙️ FUNCIONANDO!!! 🍔🚀' });
+});
 //TODAS AS ROTAS ABAIXO VÃO USAR O MIDDLEWARE!
+routes.use(authMiddleware);
 //ROTA DE PRODUTOS
 routes.post('/products', upload.single('file'), ProductController.store);
 routes.get('/products', ProductController.index);
@@ -24,13 +29,8 @@ routes.get('/products', ProductController.index);
 routes.post('/categories', CategoryController.store);
 routes.get('/categories', CategoryController.index);
 //ROTA DE PEDIDOS
+routes.put('/orders/:id', OrderController.update);
 routes.post('/orders', OrderController.store);
-
-//STATUS DO SERVIDOR!!!
-routes.get('/status', (request, response) => {
-  return response
-    .status(200)
-    .json({ message: '✅ API ⚙️ FUNCIONANDO!!! 🍔🚀' });
-});
+routes.get('/orders', OrderController.index);
 
 export default routes;
