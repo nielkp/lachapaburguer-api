@@ -23,6 +23,7 @@ routes.get('/status', (request, response) => {
 //TODAS AS ROTAS ABAIXO VÃO USAR O MIDDLEWARE!
 routes.use(authMiddleware);
 //ROTA DE PRODUTOS
+routes.put('/products/:id', upload.single('file'), ProductController.update);
 routes.post('/products', upload.single('file'), ProductController.store);
 routes.get('/products', ProductController.index);
 //ROTA DE CATEGORIAS
