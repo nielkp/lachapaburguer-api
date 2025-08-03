@@ -1,6 +1,7 @@
 import Category from '../models/Category';
 import Product from '../models/Product';
 import Order from '../schemas/Order';
+import User from '../models/User';
 import * as Yup from 'yup';
 
 class OrderController {
@@ -85,6 +86,12 @@ class OrderController {
       schema.validateSync(request.body, { abortEarly: false });
     } catch (err) {
       return response.status(400).json({ error: err.errors });
+    }
+
+    const { admin: isAdmin } = await User.findByPk(request.userId);
+
+    if (!isAdmin) {
+      return response.status(401).json();
     }
 
     const { id } = request.params;
