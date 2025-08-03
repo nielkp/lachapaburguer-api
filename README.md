@@ -18,6 +18,7 @@ docker run --name api-mongodb -p 27017:27017 -d -t mongo
 ### Bibliotecas Utilizadas
 
 - YUP
+- CORS
 - UUID
 - Express
 - BCRYPT
