@@ -4,7 +4,9 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "build": "rm -rf dist && sucrase ./src -d ./dist --transforms imports && cp package.json dist/",
+    "start": "node dist/server.js"
   },
   "author": {
     "name": "Daniel Knaip",

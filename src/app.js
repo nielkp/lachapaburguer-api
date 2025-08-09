@@ -1,13 +1,19 @@
 import { resolve } from 'node:path';
 import express from 'express';
 import routes from './routes';
+import dotenv from 'dotenv';
 import cors from 'cors';
 import './database';
+dotenv.config();
 
 class App {
   constructor() {
     this.app = express();
-    this.app.use(cors());
+    this.app.use(
+      cors({
+        origin: process.env.CORS_ORIGIN,
+      })
+    );
     this.middlewares();
     this.routes();
   }

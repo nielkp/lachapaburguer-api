@@ -14,6 +14,8 @@ const upload = multer(multerConfig);
 
 routes.post('/users', UserController.store);
 routes.post('/session', SessionController.store);
+routes.get('/products', ProductController.index);
+routes.get('/categories', CategoryController.index);
 //STATUS DO SERVIDOR!!!
 routes.get('/status', (request, response) => {
   return response
@@ -25,11 +27,9 @@ routes.use(authMiddleware);
 //ROTA DE PRODUTOS
 routes.put('/products/:id', upload.single('file'), ProductController.update);
 routes.post('/products', upload.single('file'), ProductController.store);
-routes.get('/products', ProductController.index);
 //ROTA DE CATEGORIAS
 routes.put('/categories/:id', upload.single('file'), CategoryController.update);
 routes.post('/categories', upload.single('file'), CategoryController.store);
-routes.get('/categories', CategoryController.index);
 //ROTA DE PEDIDOS
 routes.put('/orders/:id', OrderController.update);
 routes.post('/orders', OrderController.store);
