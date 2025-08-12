@@ -44,6 +44,10 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    deliveryTax: {
+      type: Number,
+      required: true,
+    },
     status: {
       type: String,
       required: true,
