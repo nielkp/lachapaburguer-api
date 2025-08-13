@@ -17,6 +17,13 @@ class OrderController {
         ),
       address: Yup.string().required('O endereço é obrigatório!'),
       deliveryTax: Yup.number().required('A taxa de entrega é obrigatória!'),
+      total: Yup.number().required('O total é obrigatório!'),
+      paymentIntentId: Yup.string(),
+      status: Yup.string(),
+      user: Yup.object({
+        id: Yup.string().required(),
+        name: Yup.string().required(),
+      }),
     });
 
     try {
@@ -25,7 +32,7 @@ class OrderController {
       return response.status(400).json({ error: err.errors });
     }
 
-    const { products, address, deliveryTax } = request.body;
+    const { products, address, deliveryTax, total, paymentIntentId, status, user } = request.body;
 
     const productsIds = products.map((product) => product.id);
 
@@ -58,14 +65,16 @@ class OrderController {
     });
 
     const order = {
-      user: {
+      user: user || {
         id: request.userId,
         name: request.userName,
       },
       address,
       deliveryTax,
-      status: 'Pedido realizado',
+      total,
+      status: status || 'Pedido realizado',
       products: formattedProducts,
+      paymentIntentId,
     };
 
     const createdOrder = await Order.create(order);
