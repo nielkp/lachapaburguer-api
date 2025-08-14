@@ -8,7 +8,9 @@ API REST para sistema de e-commerce de hamburgueria com integração Stripe para
 - ✅ CRUD de usuários, produtos e categorias
 - ✅ Upload de imagens
 - ✅ Integração com Stripe para pagamentos
-- ✅ Gestão de pedidos
+- ✅ Gestão completa de pedidos com status coloridos
+- ✅ Ordenação automática de pedidos (mais recentes primeiro)
+- ✅ Sistema de múltiplos métodos de pagamento (PIX, dinheiro, cartão)
 - ✅ Banco de dados PostgreSQL (usuários/produtos) e MongoDB (pedidos)
 
 ## 📋 Requisitos
@@ -105,11 +107,28 @@ npm start
 
 ### Pedidos
 - `POST /orders` - Criar pedido
-- `GET /orders` - Listar pedidos (autenticado)
+- `GET /orders` - Listar pedidos ordenados por data (mais recentes primeiro)
+- `GET /user-orders` - Listar pedidos do usuário logado
 - `PUT /orders/:id` - Atualizar status do pedido (autenticado)
 
 ### Status
 - `GET /status` - Verificar status da API
+
+## 📊 Sistema de Pedidos
+
+### Status Disponíveis
+- **Pedido realizado** - Status inicial do pedido
+- **Em Preparação** - Pedido sendo preparado
+- **Pedido Pronto** - Pedido finalizado
+- **Pedido à Caminho** - Pedido em rota de entrega
+- **Entregue** - Pedido entregue ao cliente
+- **Cancelado** - Pedido cancelado
+
+### Funcionalidades
+- Ordenação automática por data de criação (mais recentes primeiro)
+- Suporte a múltiplos métodos de pagamento
+- Validação completa de dados com Yup
+- Integração com Stripe para pagamentos online
 
 ## 🔧 Tecnologias Utilizadas
 

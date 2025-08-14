@@ -18,8 +18,11 @@ class OrderController {
       address: Yup.string().required('O endereço é obrigatório!'),
       deliveryTax: Yup.number().required('A taxa de entrega é obrigatória!'),
       total: Yup.number().required('O total é obrigatório!'),
-      paymentIntentId: Yup.string(),
+      paymentIntentId: Yup.string().nullable(),
       status: Yup.string(),
+      paymentMethod: Yup.string().required().oneOf(['pix', 'dinheiro', 'cartao_online', 'cartao_entrega']),
+      changeFor: Yup.number().nullable(),
+      needsChange: Yup.boolean(),
       user: Yup.object({
         id: Yup.string().required(),
         name: Yup.string().required(),
@@ -29,10 +32,12 @@ class OrderController {
     try {
       schema.validateSync(request.body, { abortEarly: false });
     } catch (err) {
+      console.log('❌ Erro de validação:', err.errors);
+      console.log('📦 Dados recebidos:', JSON.stringify(request.body, null, 2));
       return response.status(400).json({ error: err.errors });
     }
 
-    const { products, address, deliveryTax, total, paymentIntentId, status, user } = request.body;
+    const { products, address, deliveryTax, total, paymentIntentId, status, user, paymentMethod, changeFor, needsChange } = request.body;
 
     const productsIds = products.map((product) => product.id);
 
@@ -75,15 +80,26 @@ class OrderController {
       status: status || 'Pedido realizado',
       products: formattedProducts,
       paymentIntentId,
+      paymentMethod,
+      changeFor,
+      needsChange,
     };
 
+    console.log('✅ Criando pedido:', JSON.stringify(order, null, 2));
     const createdOrder = await Order.create(order);
+    console.log('🎉 Pedido criado com sucesso:', createdOrder._id);
 
     return response.status(201).json(createdOrder);
   }
 
   async index(request, response) {
-    const orders = await Order.find();
+    const orders = await Order.find().sort({ createdAt: -1 });
+
+    return response.json(orders);
+  }
+
+  async userOrders(request, response) {
+    const orders = await Order.find({ 'user.id': request.userId }).sort({ createdAt: -1 });
 
     return response.json(orders);
   }

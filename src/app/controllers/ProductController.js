@@ -25,6 +25,10 @@ class ProductController {
       return response.status(401).json();
     }
 
+    if (!request.file) {
+      return response.status(400).json({ error: 'File is required' });
+    }
+
     const { filename: path } = request.file;
     const { name, price, category_id, description, offer } = request.body;
 
@@ -108,6 +112,33 @@ class ProductController {
     //console.log({ userId: request.userId });
 
     return response.json(products);
+  }
+
+  async delete(request, response) {
+    const { admin: isAdmin } = await User.findByPk(request.userId);
+
+    if (!isAdmin) {
+      return response.status(401).json({ error: 'Acesso negado!' });
+    }
+
+    const { id } = request.params;
+    const findProduct = await Product.findByPk(id);
+
+    if (!findProduct) {
+      return response.status(404).json({ error: 'Produto não encontrado!' });
+    }
+
+    try {
+      await Product.destroy({
+        where: {
+          id,
+        },
+      });
+
+      return response.status(200).json({ message: 'Produto deletado com sucesso!' });
+    } catch (err) {
+      return response.status(500).json({ error: 'Erro interno do servidor!' });
+    }
   }
 }
 

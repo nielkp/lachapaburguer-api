@@ -31,11 +31,14 @@ routes.use(authMiddleware);
 //ROTA DE PRODUTOS
 routes.put('/products/:id', upload.single('file'), ProductController.update);
 routes.post('/products', upload.single('file'), ProductController.store);
+routes.delete('/products/:id', ProductController.delete);
 //ROTA DE CATEGORIAS
 routes.put('/categories/:id', upload.single('file'), CategoryController.update);
 routes.post('/categories', upload.single('file'), CategoryController.store);
+routes.delete('/categories/:id', CategoryController.delete);
 //ROTA DE PEDIDOS (apenas update e index precisam de autenticação)
 routes.put('/orders/:id', OrderController.update);
 routes.get('/orders', OrderController.index);
+routes.get('/user-orders', OrderController.userOrders);
 
 export default routes;

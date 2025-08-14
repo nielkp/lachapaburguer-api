@@ -107,6 +107,33 @@ class CategoryController {
     //console.log({ userId: request.userId });
     return response.json(categories);
   }
+
+  async delete(request, response) {
+    const { admin: isAdmin } = await User.findByPk(request.userId);
+
+    if (!isAdmin) {
+      return response.status(401).json({ error: 'Acesso negado!' });
+    }
+
+    const { id } = request.params;
+    const categoryExist = await Category.findByPk(id);
+
+    if (!categoryExist) {
+      return response.status(404).json({ error: 'Categoria não encontrada!' });
+    }
+
+    try {
+      await Category.destroy({
+        where: {
+          id,
+        },
+      });
+
+      return response.status(200).json({ message: 'Categoria deletada com sucesso!' });
+    } catch (err) {
+      return response.status(500).json({ error: 'Erro interno do servidor!' });
+    }
+  }
 }
 
 export default new CategoryController();
