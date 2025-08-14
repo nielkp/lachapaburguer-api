@@ -60,6 +60,19 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    paymentMethod: {
+      type: String,
+      required: true,
+      enum: ['pix', 'dinheiro', 'cartao_online', 'cartao_entrega'],
+    },
+    changeFor: {
+      type: Number,
+      required: false,
+    },
+    needsChange: {
+      type: Boolean,
+      required: false,
+    },
   },
   {
     timestamps: true,
