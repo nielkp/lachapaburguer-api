@@ -16,17 +16,37 @@ class Database {
     this.mongo();
   }
 
-  init() {
-    this.connection = new Sequelize(configDatabase);
-    models
-      .map((model) => model.init(this.connection))
-      .map(
-        (model) => model.associate && model.associate(this.connection.models)
-      );
+  async init() {
+    try {
+      this.connection = new Sequelize(configDatabase);
+      
+      // Testa a conexão com PostgreSQL
+      await this.connection.authenticate();
+      console.log('✅ Conexão com PostgreSQL estabelecida com sucesso!');
+      
+      models
+        .map((model) => model.init(this.connection))
+        .map(
+          (model) => model.associate && model.associate(this.connection.models)
+        );
+    } catch (error) {
+      console.error('❌ Erro ao conectar com PostgreSQL:', error.message);
+      console.error('🔧 Verifique se o PostgreSQL está rodando e as configurações estão corretas.');
+      // Não mata o processo, apenas loga o erro
+    }
   }
 
-  mongo() {
-    this.mongoConnection = mongoose.connect(MONGO);
+  async mongo() {
+    try {
+      this.mongoConnection = await mongoose.connect(MONGO, {
+        serverSelectionTimeoutMS: 5000, // Timeout de 5 segundos
+      });
+      console.log('✅ Conexão com MongoDB estabelecida com sucesso!');
+    } catch (error) {
+      console.error('❌ Erro ao conectar com MongoDB:', error.message);
+      console.error('🔧 Verifique se o MongoDB está rodando e as configurações estão corretas.');
+      // Não mata o processo, apenas loga o erro
+    }
   }
 }
 

@@ -41,9 +41,11 @@ class OrderController {
 
     const productsIds = products.map((product) => product.id);
 
-    const findProducts = await Product.findAll({
-      where: {
-        id: productsIds,
+    let findProducts;
+    try {
+      findProducts = await Product.findAll({
+        where: {
+          id: productsIds,
       },
       include: [
         {
@@ -53,6 +55,24 @@ class OrderController {
         },
       ],
     });
+    } catch (error) {
+      console.error('❌ Erro ao buscar produtos para o pedido:', error.message);
+      
+      // Se for erro de conexão com banco
+      if (error.name === 'SequelizeConnectionError' || error.original?.code === 'ECONNREFUSED') {
+        return response.status(503).json({
+          error: 'Serviço temporariamente indisponível',
+          message: 'Não foi possível conectar ao banco de dados. Tente novamente em alguns instantes.',
+          code: 'DATABASE_CONNECTION_ERROR'
+        });
+      }
+      
+      return response.status(500).json({
+        error: 'Erro interno do servidor',
+        message: 'Erro ao processar produtos do pedido. Tente novamente mais tarde.',
+        code: 'INTERNAL_SERVER_ERROR'
+      });
+    }
 
     const formattedProducts = findProducts.map((product) => {
       const productIndex = products.findIndex((item) => item.id === product.id);
@@ -86,22 +106,77 @@ class OrderController {
     };
 
     console.log('✅ Criando pedido:', JSON.stringify(order, null, 2));
-    const createdOrder = await Order.create(order);
-    console.log('🎉 Pedido criado com sucesso:', createdOrder._id);
-
-    return response.status(201).json(createdOrder);
+    
+    try {
+      const createdOrder = await Order.create(order);
+      console.log('🎉 Pedido criado com sucesso:', createdOrder._id);
+      return response.status(201).json(createdOrder);
+    } catch (error) {
+      console.error('❌ Erro ao criar pedido no MongoDB:', error.message);
+      
+      // Se for erro de conexão com MongoDB
+      if (error.name === 'MongooseError' || error.name === 'MongoServerError') {
+        return response.status(503).json({
+          error: 'Serviço temporariamente indisponível',
+          message: 'Não foi possível conectar ao banco de dados de pedidos. Tente novamente em alguns instantes.',
+          code: 'DATABASE_CONNECTION_ERROR'
+        });
+      }
+      
+      return response.status(500).json({
+        error: 'Erro interno do servidor',
+        message: 'Erro ao criar pedido. Tente novamente mais tarde.',
+        code: 'INTERNAL_SERVER_ERROR'
+      });
+    }
   }
 
   async index(request, response) {
-    const orders = await Order.find().sort({ createdAt: -1 });
-
-    return response.json(orders);
+    try {
+      const orders = await Order.find().sort({ createdAt: -1 });
+      return response.json(orders);
+    } catch (error) {
+      console.error('❌ Erro ao buscar pedidos:', error.message);
+      
+      // Se for erro de conexão com MongoDB
+      if (error.name === 'MongooseError' || error.name === 'MongoServerError') {
+        return response.status(503).json({
+          error: 'Serviço temporariamente indisponível',
+          message: 'Não foi possível conectar ao banco de dados de pedidos. Tente novamente em alguns instantes.',
+          code: 'DATABASE_CONNECTION_ERROR'
+        });
+      }
+      
+      return response.status(500).json({
+        error: 'Erro interno do servidor',
+        message: 'Erro ao buscar pedidos. Tente novamente mais tarde.',
+        code: 'INTERNAL_SERVER_ERROR'
+      });
+    }
   }
 
   async userOrders(request, response) {
-    const orders = await Order.find({ 'user.id': request.userId }).sort({ createdAt: -1 });
-
-    return response.json(orders);
+    try {
+      const orders = await Order.find({ 'user.id': request.userId }).sort({ createdAt: -1 });
+      return response.json(orders);
+    } catch (error) {
+      console.error('❌ Erro ao buscar pedidos do usuário:', error.message);
+      
+      // Se for erro de conexão com MongoDB
+      if (error.name === 'MongooseError' || error.name === 'MongoServerError') {
+        return response.status(503).json({
+          error: 'Serviço temporariamente indisponível',
+          message: 'Não foi possível conectar ao banco de dados de pedidos. Tente novamente em alguns instantes.',
+          code: 'DATABASE_CONNECTION_ERROR'
+        });
+      }
+      
+      return response.status(500).json({
+        error: 'Erro interno do servidor',
+        message: 'Erro ao buscar seus pedidos. Tente novamente mais tarde.',
+        code: 'INTERNAL_SERVER_ERROR'
+      });
+    }
   }
 
   async update(request, response) {
